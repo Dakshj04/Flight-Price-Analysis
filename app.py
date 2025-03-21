@@ -2,13 +2,13 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
 
 # Set page config
 st.set_page_config(page_title="Flight Price Analysis", page_icon="✈️", layout="wide")
 
-# Custom CSS for UI
+# Custom CSS for a futuristic UI
 st.markdown(
+
     """
     <style>
     body {
@@ -34,17 +34,12 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# File path to dataset
-file_path = os.path.join(os.getcwd(), "cleaned_flight_data.csv")
+# Load Data
+@st.cache_data
+def load_data():
+    df = pd.read_csv("cleaned_flight_data.csv")
+    return df
 
-# Check if the file exists
-if os.path.exists(file_path):
-    df = pd.read_csv(file_path)
-    st.write("Dataset loaded successfully!")
-else:
-    st.error(f"File not found: {file_path}. Please check the path.")
-
-# Load dataset
 df = load_data()
 
 # Header
@@ -66,7 +61,7 @@ with st.expander("📊 Data Summary & Insights"):
     st.write(df.describe())
 
 # Price Distribution Plot
-st.subheader("📈 Flight Price Distribution")
+st.subheader("📈"" Flight Price Distribution")
 fig, ax = plt.subplots(figsize=(8, 5))
 sns.histplot(df["Price"], bins=30, kde=True, color="cyan")
 ax.set_xlabel("Price")
@@ -85,6 +80,7 @@ st.pyplot(fig)
 st.subheader("🗓️ Monthly Price Trends")
 fig, ax = plt.subplots(figsize=(8, 5))
 sns.barplot(x="Month", y="Price", data=df, hue="Month", palette="magma", legend=False, errorbar=None)
+
 ax.set_title("Month-wise Average Flight Price")
 st.pyplot(fig)
 
@@ -129,3 +125,4 @@ st.pyplot(fig)
 
 # Closing Remarks
 st.markdown("#### 🚀 Built with Python, Streamlit & Seaborn | Designed for Futuristic Data Exploration")
+
