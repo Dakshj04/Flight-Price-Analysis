@@ -37,7 +37,7 @@ st.markdown(
 # Load Data
 @st.cache_data
 def load_data():
-    df = pd.read_csv("D:\Jbooks\Flight Price Analysis\cleaned_flight_data.csv")
+    df = pd.read_csv("cleaned_flight_data.csv")
     return df
 
 df = load_data()
@@ -72,15 +72,14 @@ st.pyplot(fig)
 # Total Stops vs Price
 st.subheader("🚀 Impact of Total Stops on Price")
 fig, ax = plt.subplots(figsize=(8, 5))
-sns.boxplot(x="Total_Stops", y="Price", data=df, hue="Total_Stops", palette="coolwarm", legend=False)
+sns.boxplot(x="Total_Stops", y="Price", data=df, palette="coolwarm")
 ax.set_title("Effect of Total Stops on Price")
 st.pyplot(fig)
 
 # Month-wise Average Price
 st.subheader("🗓️ Monthly Price Trends")
 fig, ax = plt.subplots(figsize=(8, 5))
-sns.barplot(x="Month", y="Price", data=df, hue="Month", palette="magma", legend=False, errorbar=None)
-
+sns.barplot(x="Month", y="Price", data=df, palette="magma", ci=None)
 ax.set_title("Month-wise Average Flight Price")
 st.pyplot(fig)
 
@@ -107,7 +106,7 @@ df_melted = df.melt(id_vars=["Price"], value_vars=source_cols, var_name="Source"
 df_melted = df_melted[df_melted["Presence"] == 1]
 
 fig, ax = plt.subplots(figsize=(8, 5))
-sns.boxplot(x="Source", y="Price", data=df_melted, hue="Source", palette="Set2", legend=False)
+sns.boxplot(x="Source", y="Price", data=df_melted, palette="Set2")
 ax.set_title("Flight Source vs. Price")
 st.pyplot(fig)
 
@@ -118,8 +117,8 @@ dest_cols = ["Destination_Banglore", "Destination_Cochin", "Destination_Delhi",
 df_melted = df.melt(id_vars=["Price"], value_vars=dest_cols, var_name="Destination", value_name="Presence")
 df_melted = df_melted[df_melted["Presence"] == 1]
 
-fig, ax = plt.subplots(figsize=(12, 8))
-sns.boxplot(x="Destination", y="Price", data=df_melted, hue="Destination", palette="Set1", legend=False)
+fig, ax = plt.subplots(figsize=(8, 5))
+sns.boxplot(x="Destination", y="Price", data=df_melted, palette="Set1")
 ax.set_title("Flight Destination vs. Price")
 st.pyplot(fig)
 
