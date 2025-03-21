@@ -35,17 +35,14 @@ st.markdown(
 )
 
 # File path to dataset
-DATA_PATH = r"D:\Jbooks\Flight Price Analysis\cleaned_flight_data.csv"
+file_path = os.path.join(os.getcwd(), "cleaned_flight_data.csv")
 
-# Load Data
-@st.cache_data
-def load_data():
-    if os.path.exists(DATA_PATH):
-        df = pd.read_csv(DATA_PATH)
-        return df
-    else:
-        st.error(f"❌ File not found: {DATA_PATH}. Please check the path.")
-        st.stop()
+# Check if the file exists
+if os.path.exists(file_path):
+    df = pd.read_csv(file_path)
+    st.write("Dataset loaded successfully!")
+else:
+    st.error(f"File not found: {file_path}. Please check the path.")
 
 # Load dataset
 df = load_data()
