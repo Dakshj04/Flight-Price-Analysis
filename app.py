@@ -2,11 +2,12 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 # Set page config
 st.set_page_config(page_title="Flight Price Analysis", page_icon="✈️", layout="wide")
 
-# Custom CSS for a futuristic UI
+# Custom CSS for UI
 st.markdown(
     """
     <style>
@@ -33,25 +34,21 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# File path to dataset
+DATA_PATH = r"D:\Jbooks\Flight Price Analysis\cleaned_flight_data.csv"
+
 # Load Data
 @st.cache_data
-def load_data(uploaded_file=None):
-    if uploaded_file is not None:
-        df = pd.read_csv(uploaded_file)
+def load_data():
+    if os.path.exists(DATA_PATH):
+        df = pd.read_csv(DATA_PATH)
         return df
     else:
-        return None
+        st.error(f"❌ File not found: {DATA_PATH}. Please check the path.")
+        st.stop()
 
-# Sidebar for file upload
-st.sidebar.header("📂 Upload Dataset")
-uploaded_file = st.sidebar.file_uploader("Upload Cleaned Flight Data", type=["csv"])
-
-# Load the dataset
-df = load_data(uploaded_file)
-
-if df is None:
-    st.warning("⚠️ Please upload a dataset to proceed.")
-    st.stop()  # Stops execution until the user uploads a file
+# Load dataset
+df = load_data()
 
 # Header
 st.title("✈️ Flight Price Analysis Dashboard")
