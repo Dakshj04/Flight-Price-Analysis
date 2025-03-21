@@ -8,7 +8,6 @@ st.set_page_config(page_title="Flight Price Analysis", page_icon="✈️", layou
 
 # Custom CSS for a futuristic UI
 st.markdown(
-
     """
     <style>
     body {
@@ -36,11 +35,23 @@ st.markdown(
 
 # Load Data
 @st.cache_data
-def load_data():
-    df = pd.read_csv("cleaned_flight_data.csv")
-    return df
+def load_data(uploaded_file=None):
+    if uploaded_file is not None:
+        df = pd.read_csv(uploaded_file)
+        return df
+    else:
+        return None
 
-df = load_data()
+# Sidebar for file upload
+st.sidebar.header("📂 Upload Dataset")
+uploaded_file = st.sidebar.file_uploader("Upload Cleaned Flight Data", type=["csv"])
+
+# Load the dataset
+df = load_data(uploaded_file)
+
+if df is None:
+    st.warning("⚠️ Please upload a dataset to proceed.")
+    st.stop()  # Stops execution until the user uploads a file
 
 # Header
 st.title("✈️ Flight Price Analysis Dashboard")
@@ -61,7 +72,7 @@ with st.expander("📊 Data Summary & Insights"):
     st.write(df.describe())
 
 # Price Distribution Plot
-st.subheader("📈"" Flight Price Distribution")
+st.subheader("📈 Flight Price Distribution")
 fig, ax = plt.subplots(figsize=(8, 5))
 sns.histplot(df["Price"], bins=30, kde=True, color="cyan")
 ax.set_xlabel("Price")
@@ -80,7 +91,6 @@ st.pyplot(fig)
 st.subheader("🗓️ Monthly Price Trends")
 fig, ax = plt.subplots(figsize=(8, 5))
 sns.barplot(x="Month", y="Price", data=df, hue="Month", palette="magma", legend=False, errorbar=None)
-
 ax.set_title("Month-wise Average Flight Price")
 st.pyplot(fig)
 
@@ -125,4 +135,3 @@ st.pyplot(fig)
 
 # Closing Remarks
 st.markdown("#### 🚀 Built with Python, Streamlit & Seaborn | Designed for Futuristic Data Exploration")
-
